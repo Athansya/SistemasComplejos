@@ -15,13 +15,21 @@ Description:
 
 # SECTION - LIBRARIES
 import numpy as np
+from matplotlib import rc
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-# SECTION - CONSTANTS
-r = 2.6  # Growth rate
+# !SECTION
+
+# SECTION - CONFIG
+# Use LaTeX throughout the figure for consistency
+# rc("font", **{"family": "serif", "serif": ["Computer Modern"], "size": 16})
+# rc("text", usetex=True)
+
+# !SECTION
+
 
 # SECTION - FUNCTIONS
-
 # Logistic mapping equation
 def logistic_mapping(r: float, x_current: float) -> float:
     """Logistic mapping function that describes population growth.
@@ -37,18 +45,30 @@ def logistic_mapping(r: float, x_current: float) -> float:
     return x_next
 
 
-
-#
-x = [i for i in range(10)]
-y = [np.random.randint(low=0, high=10) for i in x]
-
-plt.figure(figsize=(10, 10), layout="tight")
-plt.scatter(x, y)
-plt.show()
-plt.savefig("example.png", dpi=300)
+# !SECTION
 
 
 # SECTION - MAIN
 if __name__ == "__main__":
+    # Initial constants
+    r_list = np.linspace(start=0, stop=5, num=5)  # Growth rate
+    x_current_list = np.linspace(
+        start=0, stop=1, num=100
+    )  # Current population init values in percentage
 
-    
+    # Function vectorization with numpy
+    vlogistic_mapping = np.vectorize(logistic_mapping)
+
+    # Logistic mapping function plot for different growth rates
+    plt.figure(figsize=(10, 10), layout="tight")
+
+    for idx, r in enumerate(r_list):
+        x_next_list = vlogistic_mapping(
+            r=r, x_current=x_current_list
+        )  # Next population value in percentage
+        sns.lineplot(x=x_current_list, y=x_next_list, label=f"{r=}")
+
+    plt.title("Logistic map function: $x_{n+1} = r x_n (1 - x_n)$", size=15)
+    plt.xlabel("$x_n \in [0, 1]$", size=15)
+    plt.ylabel("$x_{n+1}$", size=15)
+    plt.savefig("logistic_map_function_plot.png", dpi=300)
