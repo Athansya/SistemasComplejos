@@ -15,7 +15,7 @@ Description:
 
 # SECTION - LIBRARIES
 import numpy as np
-from matplotlib import rc
+# from matplotlib import rc
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -152,5 +152,30 @@ if __name__ == "__main__":
 
     plt.suptitle("Fixed points for different values of $r$")
     # plt.savefig("multiple_r_values.png", dpi=300)  # Uncomment to save figure
+    # There are different and sometimes multiple fixed points for a given value of r
 
     # !SECTION
+
+    # SECTION - BIFURCTATION PLOT
+    # Another way to analyze how the fixed points change is using a bifurcation plot:
+    r_list = np.linspace(start=0, stop=4, num=1000)
+    n_iterations = 100
+
+    fig = plt.figure(figsize=(10,10))
+
+    for r in r_list:
+        x_current = 0.5
+        for n in range(n_iterations):
+            x_next = logistic_map_eq(r=r, x_current=x_current)
+            x_current = x_next
+        for n in range(n_iterations//4):
+            x_next = logistic_map_eq(r=r, x_current=x_current)
+            x_current = x_next
+            plt.scatter(r, x_next, c="black", s=5)
+
+    plt.title("Bifurcation plot")
+    plt.xlabel("$r$")
+    plt.ylabel("$x$")
+    plt.savefig("bifuctation_plot.png", dpi=300)
+        
+
