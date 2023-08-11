@@ -51,7 +51,7 @@ def logistic_map_eq(r: float, x_current: float) -> float:
 # SECTION - MAIN
 if __name__ == "__main__":
     # SECTION - DEFINITIONS
-    # Initial values 
+    # Initial values
     r_list = np.linspace(start=0, stop=4, num=5)  # Growth rate
     x_current_list = np.linspace(
         start=0, stop=1, num=100
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     # SECTION - 2D & 3D PLOT
     # Logistic mapping function plot for different growth rates
-    fig = plt.figure(figsize=(20,10), layout="tight")
+    fig = plt.figure(figsize=(20, 10), layout="tight")
     fig.suptitle("Logistic map function: $x_{n+1} = r x_n (1 - x_n)$", size=15)
     ax_0 = fig.add_subplot(1, 2, 1)
     ax_1 = fig.add_subplot(1, 2, 2, projection="3d")
@@ -73,9 +73,7 @@ if __name__ == "__main__":
         x_next_list = vlogistic_map_eq(
             r=r, x_current=x_current_list
         )  # Next population value in percentage x_{n+1}
-        x_next_2_list = vlogistic_map_eq(
-            r=r, x_current=x_next_list
-        )  # x_{n+2}
+        x_next_2_list = vlogistic_map_eq(r=r, x_current=x_next_list)  # x_{n+2}
         # 2D Plot
         sns.lineplot(ax=ax_0, x=x_current_list, y=x_next_list, label=f"{r=}")
         # 3D Plot
@@ -90,7 +88,7 @@ if __name__ == "__main__":
     ax_1.set_ylabel("$x_n$", size=15)
     ax_1.set_xlabel("$x_{n+1}$", size=15)
     ax_1.set_zlabel("$x_{n+2}$", size=15)
-    plt.savefig("logistic_map_function_plot.png", dpi=300)
+    # plt.savefig("logistic_map_function_plot.png", dpi=300)  # Uncomment to save figure
 
     # !SECTION
 
@@ -98,17 +96,61 @@ if __name__ == "__main__":
     # Fixed points are points where f(x) = x. For example, in the previous plot, 0 is a fixed point.
     # Let's see how does the function looks like after iterating n times.
     x_current = 0.5
-    r = 0.1 
-    n_iterations = 10 
+    r = 0.1
+    n_iterations = 10
     x_n_list = [x_current]
-    
+
     for n in range(n_iterations):
         x_next = logistic_map_eq(r=r, x_current=x_current)
         x_n_list.append(x_next)
         x_current = x_next
 
-    plt.figure(figsize=(10,10))
-    sns.lineplot(x=[i for i in range(len(x_n_list))], y=x_n_list, marker='.', markersize=15, mfc='r')
+    plt.figure(figsize=(10, 10))
+    sns.lineplot(
+        x=[i for i in range(len(x_n_list))],
+        y=x_n_list,
+        marker=".",
+        markersize=15,
+        mfc="r",
+    )
     plt.title(f"Fixed point(s) for r = {r}")
-    plt.savefig(f"fixed_point_for_r_{r}.png", dpi=300)
+    # plt.savefig(f"fixed_point_for_r_{r}.png", dpi=300)  # Uncomment to save figure
     # It approaches 0!
+
+    # What about multiple values for r?
+    r_list = np.sort(np.random.uniform(low=0, high=4.001, size=10))
+    # print(f"r = {r}")
+
+    fig, axs = plt.subplots(nrows=2, ncols=5, figsize=(20, 10), layout="tight")
+    for id_row, ax_row in enumerate(axs):  # Figure rows
+        # print(f"{id_row=}")
+        for id_col, _ in enumerate(ax_row):  # Figure cols
+            # print(f"{id_col=}")
+            x_current = 0.5
+            x_n_list = [x_current]
+            r = r_list[id_row * axs.shape[1] + id_col]  # Obtains growth rate
+
+            for n in range(n_iterations):  # Logistic map eq
+                x_next = logistic_map_eq(r=r, x_current=x_current)
+                x_n_list.append(x_next)
+                x_current = x_next
+
+            sns.lineplot(
+                ax=axs[id_row][id_col],
+                x=[i for i in range(len(x_n_list))],
+                y=x_n_list,
+                marker=".",
+                markersize=15,
+                mfc="r",
+            )
+
+            axs[id_row][id_col].set_title(f"$r$ = {r}")
+            axs[id_row][id_col].set_xlabel(f"$n$")
+            axs[id_row][id_col].set_ylabel(f"$x_n$")
+
+            del x_n_list
+
+    plt.suptitle("Fixed points for different values of $r$")
+    # plt.savefig("multiple_r_values.png", dpi=300)  # Uncomment to save figure
+
+    # !SECTION
