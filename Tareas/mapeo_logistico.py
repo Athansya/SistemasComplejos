@@ -21,7 +21,7 @@ import seaborn as sns
 
 # !SECTION
 
-# SECTION - CONFIG
+# SECTION - MATPLOTLIB LATEX CONFIG
 # Use LaTeX throughout the figure for consistency
 # rc("font", **{"family": "serif", "serif": ["Computer Modern"], "size": 16})
 # rc("text", usetex=True)
@@ -31,7 +31,7 @@ import seaborn as sns
 
 # SECTION - FUNCTIONS
 # Logistic mapping equation
-def logistic_mapping(r: float, x_current: float) -> float:
+def logistic_map_eq(r: float, x_current: float) -> float:
     """Logistic mapping function that describes population growth.
 
     Args:
@@ -50,25 +50,65 @@ def logistic_mapping(r: float, x_current: float) -> float:
 
 # SECTION - MAIN
 if __name__ == "__main__":
-    # Initial constants
-    r_list = np.linspace(start=0, stop=5, num=5)  # Growth rate
+    # SECTION - DEFINITIONS
+    # Initial values 
+    r_list = np.linspace(start=0, stop=4, num=5)  # Growth rate
     x_current_list = np.linspace(
         start=0, stop=1, num=100
     )  # Current population init values in percentage
 
     # Function vectorization with numpy
-    vlogistic_mapping = np.vectorize(logistic_mapping)
+    vlogistic_map_eq = np.vectorize(logistic_map_eq)
 
+    # !SECTION
+
+    # SECTION - 2D & 3D PLOT
     # Logistic mapping function plot for different growth rates
-    plt.figure(figsize=(10, 10), layout="tight")
+    fig = plt.figure(figsize=(20,10), layout="tight")
+    fig.suptitle("Logistic map function: $x_{n+1} = r x_n (1 - x_n)$", size=15)
+    ax_0 = fig.add_subplot(1, 2, 1)
+    ax_1 = fig.add_subplot(1, 2, 2, projection="3d")
 
     for idx, r in enumerate(r_list):
-        x_next_list = vlogistic_mapping(
+        x_next_list = vlogistic_map_eq(
             r=r, x_current=x_current_list
-        )  # Next population value in percentage
-        sns.lineplot(x=x_current_list, y=x_next_list, label=f"{r=}")
+        )  # Next population value in percentage x_{n+1}
+        x_next_2_list = vlogistic_map_eq(
+            r=r, x_current=x_next_list
+        )  # x_{n+2}
+        # 2D Plot
+        sns.lineplot(ax=ax_0, x=x_current_list, y=x_next_list, label=f"{r=}")
+        # 3D Plot
+        ax_1.plot(x_next_list, x_current_list, x_next_2_list, label=f"{r=}")
 
-    plt.title("Logistic map function: $x_{n+1} = r x_n (1 - x_n)$", size=15)
-    plt.xlabel("$x_n \in [0, 1]$", size=15)
-    plt.ylabel("$x_{n+1}$", size=15)
+    ax_0.set_title("2D")
+    ax_0.set_xlabel("$x_n$", size=15)
+    ax_0.set_ylabel("$x_{n+1}$", size=15)
+    ax_1.legend()
+    ax_1.invert_xaxis()
+    ax_1.set_title("3D")
+    ax_1.set_ylabel("$x_n$", size=15)
+    ax_1.set_xlabel("$x_{n+1}$", size=15)
+    ax_1.set_zlabel("$x_{n+2}$", size=15)
     plt.savefig("logistic_map_function_plot.png", dpi=300)
+
+    # !SECTION
+
+    # SECTION - FIXED POINTS
+    # Fixed points are points where f(x) = x. For example, in the previous plot, 0 is a fixed point.
+    # Let's see how does the function looks like after iterating n times.
+    x_current = 0.5
+    r = 0.1 
+    n_iterations = 10 
+    x_n_list = [x_current]
+    
+    for n in range(n_iterations):
+        x_next = logistic_map_eq(r=r, x_current=x_current)
+        x_n_list.append(x_next)
+        x_current = x_next
+
+    plt.figure(figsize=(10,10))
+    sns.lineplot(x=[i for i in range(len(x_n_list))], y=x_n_list, marker='.', markersize=15, mfc='r')
+    plt.title(f"Fixed point(s) for r = {r}")
+    plt.savefig(f"fixed_point_for_r_{r}.png", dpi=300)
+    # It approaches 0!
