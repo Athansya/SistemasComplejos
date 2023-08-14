@@ -15,16 +15,15 @@ Description:
 
 # SECTION - LIBRARIES
 import numpy as np
-# from matplotlib import rc
+from matplotlib import rc  # Enable Latex Figures
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 # !SECTION
 
 # SECTION - MATPLOTLIB LATEX CONFIG
-# Use LaTeX throughout the figure for consistency
-# rc("font", **{"family": "serif", "serif": ["Computer Modern"], "size": 16})
-# rc("text", usetex=True)
+rc("font", **{"family": "serif", "serif": ["Computer Modern"], "size": 16})
+rc("text", usetex=True)
 
 # !SECTION
 
@@ -88,7 +87,7 @@ if __name__ == "__main__":
     ax_1.set_ylabel("$x_n$", size=15)
     ax_1.set_xlabel("$x_{n+1}$", size=15)
     ax_1.set_zlabel("$x_{n+2}$", size=15)
-    # plt.savefig("logistic_map_function_plot.png", dpi=300)  # Uncomment to save figure
+    plt.savefig("logistic_map_function_plot.png", dpi=300)  # Uncomment to save figure
 
     # !SECTION
 
@@ -114,7 +113,7 @@ if __name__ == "__main__":
         mfc="r",
     )
     plt.title(f"Fixed point(s) for r = {r}")
-    # plt.savefig(f"fixed_point_for_r_{r}.png", dpi=300)  # Uncomment to save figure
+    plt.savefig(f"fixed_point_for_r_{r}.png", dpi=300)  # Uncomment to save figure
     # It approaches 0!
 
     # What about multiple values for r?
@@ -151,14 +150,14 @@ if __name__ == "__main__":
             del x_n_list
 
     plt.suptitle("Fixed points for different values of $r$")
-    # plt.savefig("multiple_r_values.png", dpi=300)  # Uncomment to save figure
+    plt.savefig("multiple_r_values.png", dpi=300)  # Uncomment to save figure
     # There are different and sometimes multiple fixed points for a given value of r
 
     # !SECTION
 
     # SECTION - BIFURCTATION PLOT
     # Another way to analyze how the fixed points change is using a bifurcation plot:
-    r_list = np.linspace(start=0, stop=4, num=1000)
+    r_list = np.linspace(start=0, stop=4, num=100)
     n_iterations = 100
 
     fig = plt.figure(figsize=(10,10))
@@ -176,6 +175,6 @@ if __name__ == "__main__":
     plt.title("Bifurcation plot")
     plt.xlabel("$r$")
     plt.ylabel("$x$")
-    plt.savefig("bifuctation_plot.png", dpi=300)
+    plt.savefig("bifurcation_plot.png", dpi=300)
         
 
