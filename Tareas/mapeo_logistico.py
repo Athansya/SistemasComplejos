@@ -107,9 +107,9 @@ if __name__ == "__main__":
     ax_1.set_ylabel("$x_n$", size=15)
     ax_1.set_xlabel("$x_{n+1}$", size=15)
     ax_1.set_zlabel("$x_{n+2}$", size=15)
-    plt.close()
-    # plt.show()
+    plt.show()
     # plt.savefig("logistic_map_function_plot.png", dpi=300)  # Uncomment to save figure
+    # plt.close()
 
     # !SECTION
 
@@ -138,9 +138,9 @@ if __name__ == "__main__":
         mfc="r",
     )
     plt.title(f"Fixed point(s) for r = {r}")
-    plt.close()
-    # plt.show()
+    plt.show()
     # plt.savefig(f"fixed_point_for_r_{r}.png", dpi=300)  # Uncomment to save figure
+    # plt.close()
     # It approaches 0!
 # 
     # What about multiple values for r?
@@ -180,16 +180,15 @@ if __name__ == "__main__":
             del x_n_list
 
     plt.suptitle("Fixed points for different values of $r$")
-    plt.close()
-    # plt.show()
+    plt.show()
     # plt.savefig("multiple_r_values.png", dpi=300)  # Uncomment to save figure
+    # plt.close()
     # There are different and sometimes multiple fixed points for a given value of r
 
     # !SECTION
 
     # SECTION - BIFURCTATION PLOT
     # Another way to analyze how the fixed points change is using a bifurcation plot:
-    # !TODO Add parallel method to plot multiple points
     # r_list = np.linspace(start=0, stop=4, num=100)
     r_list = np.sort(np.logspace(start=4, stop=0, num=10000))
     n_iterations = 100
@@ -198,9 +197,7 @@ if __name__ == "__main__":
 
     for r in r_list:
         x_current = 0.5
-        # for n in range(n_iterations):
-            # x_next = logistic_map_eq(r=r, x_current=x_current)
-            # x_current = x_next
+
         x_current = recursive_function(
             func=logistic_map_eq,
             n_iterations=n_iterations,
@@ -208,10 +205,7 @@ if __name__ == "__main__":
             x_n_list=[],
             r=r
         )[-1]  # Selects last value obtained
-        # for n in range(n_iterations):
-            # x_next = logistic_map_eq(r=r, x_current=x_current)
-            # x_current = x_next
-            # plt.scatter(r, x_next, marker=',', c="black", s=0.5)
+
         x_n_list = recursive_function(
             func=logistic_map_eq,
             n_iterations=n_iterations,
@@ -219,11 +213,9 @@ if __name__ == "__main__":
             x_n_list=[],
             r=r
         )
-        plt.scatter([r for _ in range(len(x_n_list))], x_n_list, c="black", marker=',', s=1)
+        plt.scatter([r for _ in range(len(x_n_list))], x_n_list, c="black", marker=',', s=1)  # Plot points
 
     plt.title("Bifurcation plot")
     plt.xlabel("$r$")
     plt.ylabel("$x$")
     plt.savefig("bifurcation_plot.png", dpi=300)
-
-    # print(np.logspace(start=4, stop=0))
