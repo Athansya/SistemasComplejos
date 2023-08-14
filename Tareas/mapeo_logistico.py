@@ -224,7 +224,6 @@ if __name__ == "__main__":
     plt.title("Bifurcation plot")
     plt.xlabel("$r$")
     plt.ylabel("$x$")
-    plt.show()
     plt.savefig("bifurcation_plot.png", dpi=300)
 
     # print(np.logspace(start=4, stop=0))
