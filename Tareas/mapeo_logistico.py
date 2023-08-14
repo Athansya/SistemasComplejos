@@ -18,9 +18,9 @@ import numpy as np
 from matplotlib import rc  # Enable Latex Figures
 import matplotlib.pyplot as plt
 import seaborn as sns
+from typing import Callable
 
 # !SECTION
-
 # SECTION - MATPLOTLIB LATEX CONFIG
 rc("font", **{"family": "serif", "serif": ["Computer Modern"], "size": 16})
 rc("text", usetex=True)
@@ -29,7 +29,7 @@ rc("text", usetex=True)
 
 
 # SECTION - FUNCTIONS
-# Logistic mapping equation
+# Logistic map equation
 def logistic_map_eq(r: float, x_current: float) -> float:
     """Logistic mapping function that describes population growth.
 
@@ -43,11 +43,31 @@ def logistic_map_eq(r: float, x_current: float) -> float:
     x_next = r * x_current * (1 - x_current)
     return x_next
 
+def recursive_function(func: Callable, n_iterations: int, x_current: float, x_n_list: list[float], **args):
+    """Makes recursion calls to a function f(x) that depends on its previous n values.
+
+    Args:
+        func (Callable): function f(x). 
+        n_iterations (int): number of recursive calls.
+        x_current (float): current value
+        x_n_list (list[float]): list of obtained values.
+
+    Returns:
+        x_n_list (list[float]): list of obtained values. 
+    """
+    if n_iterations < 1:
+        x_n_list.append(x_current)
+        return x_n_list
+    else:
+        x_n_list.append(x_current)
+        x_next = func(x_current=x_current, **args)
+        return recursive_function(func=func, n_iterations=n_iterations-1, x_current=x_next, x_n_list=x_n_list, **args)
 
 # !SECTION
 
 
 # SECTION - MAIN
+
 if __name__ == "__main__":
     # SECTION - DEFINITIONS
     # Initial values
@@ -87,6 +107,8 @@ if __name__ == "__main__":
     ax_1.set_ylabel("$x_n$", size=15)
     ax_1.set_xlabel("$x_{n+1}$", size=15)
     ax_1.set_zlabel("$x_{n+2}$", size=15)
+    plt.close()
+    # plt.show()
     # plt.savefig("logistic_map_function_plot.png", dpi=300)  # Uncomment to save figure
 
     # !SECTION
@@ -97,12 +119,15 @@ if __name__ == "__main__":
     x_current = 0.5
     r = 0.1
     n_iterations = 10
-    x_n_list = [x_current]
 
-    for n in range(n_iterations):
-        x_next = logistic_map_eq(r=r, x_current=x_current)
-        x_n_list.append(x_next)
-        x_current = x_next
+    # Update population value n times
+    x_n_list = recursive_function(
+        func=logistic_map_eq,
+        n_iterations=n_iterations,
+        x_current=x_current,
+        x_n_list=[],
+        r=r
+    )
 
     plt.figure(figsize=(10, 10))
     sns.lineplot(
@@ -113,9 +138,11 @@ if __name__ == "__main__":
         mfc="r",
     )
     plt.title(f"Fixed point(s) for r = {r}")
+    plt.close()
+    # plt.show()
     # plt.savefig(f"fixed_point_for_r_{r}.png", dpi=300)  # Uncomment to save figure
     # It approaches 0!
-
+# 
     # What about multiple values for r?
     r_list = np.sort(np.random.uniform(low=0, high=4.001, size=10))
     # print(f"r = {r}")
@@ -126,13 +153,16 @@ if __name__ == "__main__":
         for id_col, _ in enumerate(ax_row):  # Figure cols
             # print(f"{id_col=}")
             x_current = 0.5
-            x_n_list = [x_current]
+            # x_n_list = [x_current]
             r = r_list[id_row * axs.shape[1] + id_col]  # Obtains growth rate
 
-            for n in range(n_iterations):  # Logistic map eq
-                x_next = logistic_map_eq(r=r, x_current=x_current)
-                x_n_list.append(x_next)
-                x_current = x_next
+            x_n_list = recursive_function(
+                func=logistic_map_eq,
+                n_iterations=n_iterations,
+                x_current=x_current,
+                x_n_list=[],
+                r=r
+            )
 
             sns.lineplot(
                 ax=axs[id_row][id_col],
@@ -150,6 +180,8 @@ if __name__ == "__main__":
             del x_n_list
 
     plt.suptitle("Fixed points for different values of $r$")
+    plt.close()
+    # plt.show()
     # plt.savefig("multiple_r_values.png", dpi=300)  # Uncomment to save figure
     # There are different and sometimes multiple fixed points for a given value of r
 
@@ -158,22 +190,41 @@ if __name__ == "__main__":
     # SECTION - BIFURCTATION PLOT
     # Another way to analyze how the fixed points change is using a bifurcation plot:
     # !TODO Add parallel method to plot multiple points
-    r_list = np.linspace(start=0, stop=4, num=100)
+    # r_list = np.linspace(start=0, stop=4, num=100)
+    r_list = np.sort(np.logspace(start=4, stop=0, num=10000))
     n_iterations = 100
 
     fig = plt.figure(figsize=(10,10))
 
     for r in r_list:
         x_current = 0.5
-        for n in range(n_iterations):
-            x_next = logistic_map_eq(r=r, x_current=x_current)
-            x_current = x_next
-        for n in range(n_iterations):
-            x_next = logistic_map_eq(r=r, x_current=x_current)
-            x_current = x_next
-            plt.scatter(r, x_next, c="black", s=5)
+        # for n in range(n_iterations):
+            # x_next = logistic_map_eq(r=r, x_current=x_current)
+            # x_current = x_next
+        x_current = recursive_function(
+            func=logistic_map_eq,
+            n_iterations=n_iterations,
+            x_current=x_current,
+            x_n_list=[],
+            r=r
+        )[-1]  # Selects last value obtained
+        # for n in range(n_iterations):
+            # x_next = logistic_map_eq(r=r, x_current=x_current)
+            # x_current = x_next
+            # plt.scatter(r, x_next, marker=',', c="black", s=0.5)
+        x_n_list = recursive_function(
+            func=logistic_map_eq,
+            n_iterations=n_iterations,
+            x_current=x_current,
+            x_n_list=[],
+            r=r
+        )
+        plt.scatter([r for _ in range(len(x_n_list))], x_n_list, c="black", marker=',', s=1)
 
     plt.title("Bifurcation plot")
     plt.xlabel("$r$")
     plt.ylabel("$x$")
+    plt.show()
     plt.savefig("bifurcation_plot.png", dpi=300)
+
+    # print(np.logspace(start=4, stop=0))
