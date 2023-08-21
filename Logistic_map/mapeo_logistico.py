@@ -153,7 +153,6 @@ if __name__ == "__main__":
         for id_col, _ in enumerate(ax_row):  # Figure cols
             # print(f"{id_col=}")
             x_current = 0.5
-            # x_n_list = [x_current]
             r = r_list[id_row * axs.shape[1] + id_col]  # Obtains growth rate
 
             x_n_list = recursive_function(
@@ -187,7 +186,7 @@ if __name__ == "__main__":
 
     # !SECTION
 
-    # SECTION - BIFURCTATION PLOT
+    # SECTION - BIFURCATION PLOT
     # Another way to analyze how the fixed points change is using a bifurcation plot:
     # r_list = np.linspace(start=0, stop=4, num=100)
     r_list = np.sort(np.logspace(start=4, stop=0, num=10000))
@@ -219,3 +218,6 @@ if __name__ == "__main__":
     plt.xlabel("$r$")
     plt.ylabel("$x$")
     plt.savefig("bifurcation_plot.png", dpi=300)
+
+    # !SECTION
+# !SECTION
