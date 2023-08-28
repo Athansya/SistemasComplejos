@@ -10,6 +10,8 @@ Modified By: Alfonso Toriz Vazquez (atoriz98@comunidad.unam.mx>)
 License: MIT License
 -----
 Description: 
+#TODO - REFACTOR CODE, ADD FUNCTIONS, ADD PLOT STYLES, OBTAIN DIFFERENT PLANE PLOTS
+#TODO - OBTAIN BIFURCACTION DIAGRAM
 '''
 
 # ---------------------------------------------------------------------------- #
