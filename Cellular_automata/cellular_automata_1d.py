@@ -19,7 +19,15 @@ import numpy as np
 import argparse
 
 
-def parse_arguments():
+def parse_arguments() -> tuple[int, int, str]:
+    """Reads and process command line arguments.
+
+    Returns:
+        tuple[int, int, str]: Returns a tuple containing
+        the number of cells, generations and rule for the
+        automata. 
+    """
+
     # Parsing command line options
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -65,7 +73,24 @@ def parse_arguments():
     return num_cells, generations, rule
 
 
-def apply_rule(rule, left_neighbor, cell, right_neighbor):
+def apply_rule(
+    rule: str,
+    left_neighbor: int, 
+    cell: int, 
+    right_neighbor: int
+    ) -> int:
+    """Applies the chosen rule for the automata
+    on a specific cell.
+
+    Args:
+        rule (str): automata rule [1-255] in binary.
+        left_neighbor (int): left neighbor state [0, 1].
+        cell (int): cell state [0, 1]. 
+        right_neighbor (int): right neighbor state [0, 1]. 
+
+    Returns:
+        int: cell new state [0, 1].
+    """
     if cell:
         if left_neighbor:
             if right_neighbor:  # 111
@@ -109,7 +134,6 @@ if __name__ == "__main__":
         # print(NEW_WORLD)
 
     plt.imshow(WORLD, cmap='binary')
-    # plt.axes('off')
     plt.title(f"Rule {int(RULE, 2)}")
     plt.axis('off')
     plt.savefig(f"1D_automata_rule_{int(RULE, 2)}.png")
