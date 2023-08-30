@@ -92,7 +92,8 @@ class CA:
 
     def save_world_to_image(self, title: str = None, filename: str = None):
         img = self.world_to_numpy()
-        plt.imshow(img)
+        plt.imshow(img, cmap="binary")
+        plt.axis("off")
         if title is not None:
             plt.title(f"{title}")
         else:
@@ -107,11 +108,12 @@ class CA:
 
 if __name__ == "__main__":
     # CA init
-    ROWS, COLS = 11, 11
+    ROWS, COLS = 101, 101
     ca = CA(world_dim=(ROWS, COLS))
-    ca.show_world()
     ca.set_cell_value(ROWS//2, COLS//2, 1)
-    # Updates CA
-    for _ in range(10):
+    # Updates CA and saves images
+    for _ in range(8):
         ca.update_world()
-        ca.save_world_to_image()
+        ca.save_world_to_image(
+            filename=f"ca_solification_rules_gen_{ca.gen}.png"
+        )
