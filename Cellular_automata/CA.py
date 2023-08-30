@@ -15,6 +15,7 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 import matplotlib.pyplot as plt
 from numpy import array, ndarray
+from typing import Callable
 
 
 @dataclass()
@@ -47,7 +48,8 @@ class CA:
 
     def __post_init__(self):
         self.world = [
-            [Cell() for _ in range(self.world_dim[1])] for _ in range(self.world_dim[0])
+            [Cell() for _ in range(self.world_dim[1] + 1)]
+            for _ in range(self.world_dim[0] + 1)
         ]
         self.new_world = deepcopy(self.world)
 
@@ -57,6 +59,15 @@ class CA:
     def show_world(self):
         for row in self.world:
             print(*row)
+
+    def show_world_pretty(self):
+        state_to_char = {
+            0: " ",
+            1: "#"
+        }
+
+        for row in self.world:
+            print(*[state_to_char[cell.state] for cell in row])
 
     def apply_rules(self, row_index, col_index) -> int:
         # Solidification rules
@@ -76,11 +87,45 @@ class CA:
         else:
             return self.states["0"]
 
+    def game_of_life_rules(self, row_index, col_index) -> int:
+        # Conway's rules
+        # 1 with 2 or 3 -> 1 else -> 0
+        # 0 with 3 -> 1 else 0
+
+        neighborhood_sum = 0 - self.world[row_index][col_index].state
+        # Live cell
+        if self.world[row_index][col_index].state == self.states['1']:
+            for row in self.world[row_index - 1 : row_index + 2]:
+                neighborhood_sum += sum(
+                    cell.state for cell in row[col_index - 1 : col_index + 2]
+                )
+            if neighborhood_sum == 2 or neighborhood_sum == 3:
+                # Keeps living
+                return self.states["1"]
+            else:
+                # Dies
+                return self.states["0"]
+        else:  # Dead cell
+            for row in self.world[row_index - 1 : row_index + 2]:
+                neighborhood_sum += sum(
+                    cell.state for cell in row[col_index - 1 : col_index + 2]
+                )
+            if neighborhood_sum == 3:
+                # Revives
+                return self.states["1"]
+            else:
+                # Still dead
+                return self.states["0"]
+
+
     def update_world(self, generations: int = 10):
         for _ in range(1, generations + 1):
             for row_index in range(1, self.world_dim[0]):
                 for col_index in range(1, self.world_dim[1]):
-                    self.new_world[row_index][col_index].state = self.apply_rules(
+                    # self.new_world[row_index][col_index].state = self.apply_rules(
+                        # row_index, col_index
+                    # )
+                    self.new_world[row_index][col_index].state = self.game_of_life_rules(
                         row_index, col_index
                     )
             # Update worlds!
@@ -102,18 +147,13 @@ class CA:
             plt.savefig(f"{filename}.png")
         else:
             plt.savefig(f"ca_{self.gen}.png")
-        
-
-
 
 if __name__ == "__main__":
     # CA init
     ROWS, COLS = 101, 101
     ca = CA(world_dim=(ROWS, COLS))
-    ca.set_cell_value(ROWS//2, COLS//2, 1)
+    ca.set_cell_value(ROWS // 2, COLS // 2, 1)
     # Updates CA and saves images
     for _ in range(8):
         ca.update_world()
-        ca.save_world_to_image(
-            filename=f"ca_solification_rules_gen_{ca.gen}.png"
-        )
+        ca.save_world_to_image(filename=f"ca_solification_rules_gen_{ca.gen}.png")
