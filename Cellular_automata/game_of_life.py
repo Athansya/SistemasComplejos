@@ -69,7 +69,9 @@ if __name__ == "__main__":
     # Create GIF
     images = []
     for _ in range(100):
-        images.append(PIL.Image.fromarray((ca.world_to_numpy()*255).astype(uint8)))
+        pil_img = PIL.Image.fromarray((ca.world_to_numpy()*255).astype(uint8))
+        pil_img = pil_img.resize((ROWS*10, COLS*10), resample=PIL.Image.NEAREST)
+        images.append(pil_img)
         ca.update_world(generations=1)
         # Show on terminal
         # system("clear")
