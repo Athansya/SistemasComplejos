@@ -72,6 +72,7 @@ def lorenz_system(
 
     return [dx_dt, dy_dt, dz_dt]
 
+
 def lorenz_solver(initial_state, sigma=SIGMA, rho=RHO, beta=BETA, dt=TIME_STEP, num_steps=NUM_STEPS):
     # Create solver object
     solver = solve_ivp(lorenz_system, (0, num_steps), initial_state, args=(sigma, rho, beta), dense_output=True)
@@ -116,22 +117,24 @@ def main():
 
 
     # Bifurcation map
-    rho_values = np.linspace(start=0, stop=250, num=1000)
+    num_rho_values = 500
+    rho_values = np.linspace(start=0, stop=250, num=num_rho_values)
+    num_steps = 200
 
     plt.figure(figsize=(10, 10))
     for rho in rho_values:
         # Initial state for x, y, z
         initial_state = (0.01, 0.0, 0.0)
 
-        trajectory = lorenz_solver(initial_state=initial_state, rho=rho, num_steps=200)  # Saves the last coor
+        trajectory = lorenz_solver(initial_state=initial_state, rho=rho, num_steps=num_steps)  # Saves the last coor
         
-        plt.scatter([rho for _ in range(len(trajectory[2, -100:]))], trajectory[2, -100:], c="black", marker='.', s=0.2, linewidths=0)
+        plt.scatter([rho for _ in range(len(trajectory[2,-100:]))], trajectory[2,-100:], c="black", marker='.', s=1, linewidths=0)
 
     plt.title("Lorenz bifurcation plot")
     plt.xlabel("$r$")
     plt.ylabel("$z$")
     plt.savefig("lorenz_bifurcation_plot_z.png")
-
+# 
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
