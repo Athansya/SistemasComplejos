@@ -20,18 +20,12 @@ from typing import Callable
 
 @dataclass()
 class Cell:
-    """Class for storing the state of a cell"""
+    """Class for storing the state of a cell
+    Args:
+        state (int): state of the cell. Default 0.
+    """
 
     state: int = 0
-    # _state: int = 0
-
-    # @property
-    # def state(self) -> int:
-    # return self._state
-    #
-    # @state.setter
-    # def state(self, value: int) -> None:
-    # self._state = value
 
     def __add__(self, other) -> int:
         return self.state + other.state
@@ -42,6 +36,11 @@ class Cell:
 
 @dataclass
 class CA:
+    """Class for creating a cellular automata
+    Args:
+        world_dim (tuple[int, int]): Dimensions MxN of the world grid.
+        states (dict[str, int]): Valid states for the cell
+    """
     world_dim: tuple[int, int]
     states: dict[str, int] = field(default_factory=lambda: {"0": 0, "1": 1})
     gen: int = field(init=False, default=0)
@@ -54,13 +53,22 @@ class CA:
         self.new_world = deepcopy(self.world)
 
     def set_cell_value(self, row_index: int, col_index: int, value: int):
+        """Sets the state of a cell.
+
+        Args:
+            row_index (int): row position of cell in world grid.
+            col_index (int): column position of cell in world grid. 
+            value (int): new state value. 
+        """
         self.world[row_index][col_index].state = value
 
     def show_world(self):
+        """Prints the world grid"""
         for row in self.world:
             print(*row)
 
     def show_world_pretty(self):
+        """Pretty print of world grid"""
         state_to_char = {
             0: " ",
             1: "#"
@@ -69,7 +77,16 @@ class CA:
         for row in self.world:
             print(*[state_to_char[cell.state] for cell in row])
 
-    def apply_rules(self, row_index, col_index) -> int:
+    def apply_rules(self, row_index: int, col_index: int) -> int:
+        """Applies solidification rules for a 2D cellular automata.
+
+        Args:
+            row_index (int): row position in world grid. 
+            col_index (int): col position in world grid. 
+
+        Returns:
+            int: new cell's state.
+        """
         # Solidification rules
         # Case 1. State == 1 -> 1
         if self.world[row_index][col_index].state == self.states["1"]:
@@ -87,7 +104,16 @@ class CA:
         else:
             return self.states["0"]
 
-    def game_of_life_rules(self, row_index, col_index) -> int:
+    def game_of_life_rules(self, row_index: int, col_index: int) -> int:
+        """Applies Conway's game of life rules for 2D cellular automata.
+
+        Args:
+            row_index (int): _description_
+            col_index (int): _description_
+
+        Returns:
+            int: _description_
+        """
         # Conway's rules
         # 1 with 2 or 3 -> 1 else -> 0
         # 0 with 3 -> 1 else 0
@@ -119,23 +145,41 @@ class CA:
 
 
     def update_world(self, generations: int = 10):
+        """Updates world grid using a set of rules
+
+        Args:
+            generations (int, optional): Number of generations. Defaults to 10.
+        """
         for _ in range(1, generations + 1):
             for row_index in range(1, self.world_dim[0]):
                 for col_index in range(1, self.world_dim[1]):
-                    # self.new_world[row_index][col_index].state = self.apply_rules(
-                        # row_index, col_index
-                    # )
-                    self.new_world[row_index][col_index].state = self.game_of_life_rules(
+                    # Solidification rules
+                    self.new_world[row_index][col_index].state = self.apply_rules(
                         row_index, col_index
                     )
+                    # Game of life rules
+                    # self.new_world[row_index][col_index].state = self.game_of_life_rules(
+                        # row_index, col_index
+                    # )
             # Update worlds!
             self.world = deepcopy(self.new_world)
             self.gen += 1  # Update gen counter
 
     def world_to_numpy(self) -> ndarray:
+        """Converts world grid to numpy array.
+
+        Returns:
+            ndarray: converted world grid.
+        """
         return array([[cell.state for cell in row] for row in self.world])
 
     def save_world_to_image(self, title: str = None, filename: str = None):
+        """Saves the world state as 'png' image.
+
+        Args:
+            title (str, optional): Image title. Defaults to None.
+            filename (str, optional): file name. Defaults to None.
+        """
         img = self.world_to_numpy()
         plt.imshow(img, cmap="binary")
         plt.axis("off")
