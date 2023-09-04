@@ -10,7 +10,6 @@ Modified By: Alfonso Toriz Vazquez (atoriz98@comunidad.unam.mx>)
 License: MIT License
 -----
 Description: 
-#TODO - OBTAIN BIFURCACTION DIAGRAM
 '''
 
 # ---------------------------------------------------------------------------- #
@@ -115,12 +114,21 @@ def main():
     plt.title("Lorenz Attractor")
     plt.savefig("example_lorenz_solver.png")
 
+    ax.view_init(0, -90, 0)
+    plt.savefig("example_lorenz_solver_rot1.png")
+
+    ax.view_init(180, 180, 180)
+    plt.savefig("example_lorenz_solver_rot2.png")
+
+    ax.view_init(-90, 180, 180)
+    plt.savefig("example_lorenz_solver_rot3.png")
+
 
     # Bifurcation map
     num_rho_values = 500
     rho_values = np.linspace(start=0, stop=250, num=num_rho_values)
     num_steps = 200
-
+# 
     plt.figure(figsize=(10, 10))
     for rho in rho_values:
         # Initial state for x, y, z
@@ -134,7 +142,7 @@ def main():
     plt.xlabel("$r$")
     plt.ylabel("$z$")
     plt.savefig("lorenz_bifurcation_plot_z.png")
-# 
+
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
