@@ -10,7 +10,6 @@ Modified By: Alfonso Toriz Vazquez (atoriz98@comunidad.unam.mx>)
 License: MIT License
 -----
 Description: Simple cellular automata class.
-#TODO Refactor code to make Cell class immutable
 """
 from copy import deepcopy
 from dataclasses import dataclass, field
