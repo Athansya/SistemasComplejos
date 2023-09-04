@@ -10,15 +10,15 @@ Modified By: Alfonso Toriz Vazquez (atoriz98@comunidad.unam.mx>)
 License: MIT License
 -----
 Description: Simple cellular automata class.
+#TODO Refactor code to make Cell class immutable
 """
 from copy import deepcopy
 from dataclasses import dataclass, field
 import matplotlib.pyplot as plt
-from numpy import array, ndarray
-from typing import Callable
+import numpy as np
 
 
-@dataclass()
+@dataclass(slots=True)
 class Cell:
     """Class for storing the state of a cell
     Args:
@@ -27,52 +27,49 @@ class Cell:
 
     state: int = 0
 
-    def __add__(self, other) -> int:
-        return self.state + other.state
-
     def __repr__(self) -> str:
         return str(self.state)
 
 
-@dataclass
+@dataclass(slots=True)
 class CA:
     """Class for creating a cellular automata
     Args:
         world_dim (tuple[int, int]): Dimensions MxN of the world grid.
         states (dict[str, int]): Valid states for the cell
     """
+
     world_dim: tuple[int, int]
     states: dict[str, int] = field(default_factory=lambda: {"0": 0, "1": 1})
     gen: int = field(init=False, default=0)
+    world: list[list[Cell]] = field(init=False)
+    new_world: list[list[Cell]] = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.world = [
             [Cell() for _ in range(self.world_dim[1] + 1)]
             for _ in range(self.world_dim[0] + 1)
         ]
         self.new_world = deepcopy(self.world)
 
-    def set_cell_value(self, row_index: int, col_index: int, value: int):
+    def set_cell_value(self, row_index: int, col_index: int, value: int) -> None:
         """Sets the state of a cell.
 
         Args:
             row_index (int): row position of cell in world grid.
-            col_index (int): column position of cell in world grid. 
-            value (int): new state value. 
+            col_index (int): column position of cell in world grid.
+            value (int): new state value.
         """
         self.world[row_index][col_index].state = value
 
-    def show_world(self):
+    def show_world(self) -> None:
         """Prints the world grid"""
         for row in self.world:
             print(*row)
 
-    def show_world_pretty(self):
+    def show_world_pretty(self) -> None:
         """Pretty print of world grid"""
-        state_to_char = {
-            0: " ",
-            1: "#"
-        }
+        state_to_char = " #"
 
         for row in self.world:
             print(*[state_to_char[cell.state] for cell in row])
@@ -81,8 +78,8 @@ class CA:
         """Applies solidification rules for a 2D cellular automata.
 
         Args:
-            row_index (int): row position in world grid. 
-            col_index (int): col position in world grid. 
+            row_index (int): row position in world grid.
+            col_index (int): col position in world grid.
 
         Returns:
             int: new cell's state.
@@ -120,7 +117,7 @@ class CA:
 
         neighborhood_sum = 0 - self.world[row_index][col_index].state
         # Live cell
-        if self.world[row_index][col_index].state == self.states['1']:
+        if self.world[row_index][col_index].state == self.states["1"]:
             for row in self.world[row_index - 1 : row_index + 2]:
                 neighborhood_sum += sum(
                     cell.state for cell in row[col_index - 1 : col_index + 2]
@@ -143,8 +140,7 @@ class CA:
                 # Still dead
                 return self.states["0"]
 
-
-    def update_world(self, generations: int = 10):
+    def update_world(self, generations: int = 10) -> None:
         """Updates world grid using a set of rules
 
         Args:
@@ -159,21 +155,25 @@ class CA:
                     )
                     # Game of life rules
                     # self.new_world[row_index][col_index].state = self.game_of_life_rules(
-                        # row_index, col_index
+                    # row_index, col_index
                     # )
             # Update worlds!
             self.world = deepcopy(self.new_world)
             self.gen += 1  # Update gen counter
 
-    def world_to_numpy(self) -> ndarray:
+    def world_to_numpy(self) -> np.ndarray:
         """Converts world grid to numpy array.
 
         Returns:
-            ndarray: converted world grid.
+            np.ndarray: converted world grid.
         """
-        return array([[cell.state for cell in row] for row in self.world])
+        return np.array([[cell.state for cell in row] for row in self.world])
 
-    def save_world_to_image(self, title: str = None, filename: str = None):
+    def save_world_to_image(
+        self,
+        title: str | None = None,
+        filename: str | None = None
+    ) -> None:
         """Saves the world state as 'png' image.
 
         Args:
@@ -192,12 +192,17 @@ class CA:
         else:
             plt.savefig(f"ca_{self.gen}.png")
 
-if __name__ == "__main__":
+
+def main():
     # CA init
-    ROWS, COLS = 101, 101
+    ROWS, COLS = 501, 501
     ca = CA(world_dim=(ROWS, COLS))
     ca.set_cell_value(ROWS // 2, COLS // 2, 1)
     # Updates CA and saves images
-    for _ in range(8):
+    for _ in range(10):
         ca.update_world()
         ca.save_world_to_image(filename=f"ca_solification_rules_gen_{ca.gen}.png")
+
+
+if __name__ == "__main__":
+    main()
