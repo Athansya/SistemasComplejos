@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class Cell:
     """Class for storing the state of a cell
     Args:
@@ -60,7 +60,7 @@ class CA:
             col_index (int): column position of cell in world grid.
             value (int): new state value.
         """
-        self.world[row_index][col_index].state = value
+        self.world[row_index][col_index] = Cell(state=value)
 
     def show_world(self) -> None:
         """Prints the world grid"""
@@ -150,8 +150,8 @@ class CA:
             for row_index in range(1, self.world_dim[0]):
                 for col_index in range(1, self.world_dim[1]):
                     # Solidification rules
-                    self.new_world[row_index][col_index].state = self.apply_rules(
-                        row_index, col_index
+                    self.new_world[row_index][col_index] = Cell(
+                        state=self.apply_rules(row_index, col_index)
                     )
                     # Game of life rules
                     # self.new_world[row_index][col_index].state = self.game_of_life_rules(
@@ -195,7 +195,7 @@ class CA:
 
 def main():
     # CA init
-    ROWS, COLS = 501, 501
+    ROWS, COLS = 101, 101
     ca = CA(world_dim=(ROWS, COLS))
     ca.set_cell_value(ROWS // 2, COLS // 2, 1)
     # Updates CA and saves images
