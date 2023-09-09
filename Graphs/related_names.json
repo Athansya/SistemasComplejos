@@ -1,0 +1,200 @@
+{
+    "Cob": {
+        "Taborlin": 1,
+        "Jake": 2,
+        "Graham": 1,
+        "Kvothe": 8,
+        "Bast": 1
+    },
+    "Jacob": {
+        "Cob": 1
+    },
+    "Graham": {
+        "Carter": 1,
+        "Jake": 2
+    },
+    "Jake": {
+        "Cob": 2,
+        "Carter": 2,
+        "Graham": 1
+    },
+    "Taborlin": {
+        "Tehlu": 1
+    },
+    "Bast": {
+        "Carter": 2,
+        "Kvothe": 10
+    },
+    "Teren": {
+        "Shandi": 1
+    },
+    "Abenthy": {
+        "Teren": 1
+    },
+    "Kvothe": {
+        "Ben": 1,
+        "Bast": 11,
+        "Kilvin": 1
+    },
+    "Shandi": {
+        "Teren": 1
+    },
+    "Ash": {
+        "Kvothe": 1,
+        "Encanis": 1
+    },
+    "Loni": {
+        "Trapis": 1
+    },
+    "Perial": {
+        "Tehlu": 2
+    },
+    "Tehlu": {
+        "Perial": 5,
+        "Encanis": 12,
+        "Ash": 2
+    },
+    "Encanis": {
+        "Tehlu": 9,
+        "Ash": 2
+    },
+    "Lanre": {
+        "Lyra": 9,
+        "Selitos": 6,
+        "Haliax": 4
+    },
+    "Lyra": {
+        "Lanre": 5
+    },
+    "Selitos": {
+        "Lyra": 1,
+        "Lanre": 5,
+        "Aleph": 1
+    },
+    "Haliax": {
+        "Skarpi": 3,
+        "Lanre": 3
+    },
+    "Skarpi": {
+        "Lanre": 2,
+        "Haliax": 2
+    },
+    "Trapis": {
+        "Nathan": 1
+    },
+    "Roent": {
+        "Reta": 1,
+        "Derrik": 1
+    },
+    "Reta": {
+        "Denna": 2,
+        "Josn": 1
+    },
+    "Denna": {
+        "Josn": 1,
+        "Savien": 1,
+        "Sovoy": 1,
+        "Fela": 1,
+        "Stanchion": 1,
+        "Mauthen": 1,
+        "Ordal": 1
+    },
+    "Simmon": {
+        "Manet": 3,
+        "Sovoy": 1,
+        "Stanchion": 1,
+        "Denna": 1
+    },
+    "Lorren": {
+        "Kilvin": 1,
+        "Ambrose": 4,
+        "Elodin": 1
+    },
+    "Basil": {
+        "Lorren": 2
+    },
+    "Manet": {
+        "Simmon": 1,
+        "Ambrose": 2,
+        "Kilvin": 1
+    },
+    "Arwyl": {
+        "Hemme": 2,
+        "Mandrag": 1,
+        "Elodin": 1,
+        "Elxa": 2,
+        "Kilvin": 1
+    },
+    "Elxa": {
+        "Kilvin": 3,
+        "Arwyl": 2,
+        "Mandrag": 1,
+        "Elodin": 2,
+        "Manet": 1,
+        "Fenton": 1,
+        "Ash": 1
+    },
+    "Mandrag": {
+        "Elodin": 1
+    },
+    "Kilvin": {
+        "Elxa": 2,
+        "Arwyl": 1,
+        "Elodin": 3,
+        "Hemme": 1,
+        "Lorren": 2,
+        "Simmon": 2
+    },
+    "Hemme": {
+        "Brandeur": 3,
+        "Basil": 1,
+        "Lorren": 1,
+        "Elodin": 1,
+        "Arwyl": 1
+    },
+    "Ambrose": {
+        "Fela": 1,
+        "Kvothe": 2,
+        "Manet": 1,
+        "Hemme": 2,
+        "Lorren": 2
+    },
+    "Ben": {
+        "Ambrose": 1
+    },
+    "Brandeur": {
+        "Hemme": 1,
+        "Lorren": 1,
+        "Ambrose": 1,
+        "Arwyl": 1
+    },
+    "Fenton": {
+        "Elxa": 4,
+        "Denna": 1
+    },
+    "Stanchion": {
+        "Simmon": 2
+    },
+    "Anker": {
+        "Penny": 3
+    },
+    "Fela": {
+        "Stanchion": 1
+    },
+    "Mauthen": {
+        "Denna": 1
+    },
+    "Elodin": {
+        "Ambrose": 1,
+        "Kvothe": 1
+    },
+    "Shep": {
+        "Cob": 1
+    },
+    "Katie": {
+        "Graham": 1
+    },
+    "Martin": {
+        "Bast": 1
+    }
+}
