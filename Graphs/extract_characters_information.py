@@ -1,5 +1,5 @@
 '''
-File: networkx_tutorial.py
+File: extract_characters_information.py
 Project: Graphs
 File Created: Tuesday, 5th September 2023 1:47:43 pm
 Author: Alfonso Toriz Vazquez (atoriz98@comunidad.unam.mx)
@@ -13,7 +13,7 @@ Description:
 '''
 
 import json
-import networkx as nx
+# import networkx as nx
 import re
 from collections import defaultdict
 
