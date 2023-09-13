@@ -16,6 +16,7 @@ import numpy as np
 from os import system
 from time import sleep
 
+# TODO ADD DIFFERENT SHAPES DEPENDING ON THE DIRECTION OF THE AGENT
 
 @dataclass
 class Boid:
@@ -55,7 +56,6 @@ class Playground:
             # Random positions and velocity
             x = np.random.uniform(0, self.shape[0])
             y = np.random.uniform(0, self.shape[1])
-            # TODO Make the movement smoother
             dx = np.random.uniform(-1, 1)
             dy = np.random.uniform(-1, 1)
 
